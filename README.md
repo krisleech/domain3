@@ -52,7 +52,7 @@ end
 ```ruby
 class RegisterUser
   class Form
-    include Domain3::Form
+    include D3::Form
 
     attribute :username, String
     attribute :email,    String
@@ -71,9 +71,8 @@ The `Form` will have [ActiveModel::Validations]() and [Virtus]() gems included.
 
 ```ruby
 class RegisterUser
-  include Domain3:Service
+  include D3::Service
 
-  event      :user_registered
   dependency :user_repo, default: 'User',
              :validator, default: 'Validator'
 
@@ -101,6 +100,8 @@ Wisper provides broadcasting of events and subscribing of listeners.
 ```ruby
 class RegisterUser
   class Validator
+    include D3::Validator
+
     dependency :user_repo, 'User'
 
     def validate(form)
