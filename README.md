@@ -1,31 +1,117 @@
 # Domain3
 
-TODO: Write a gem description
+Lightweight Service, Form and Validator objects.
+
+Decoupled and testable.
+
+Leans heavily on other gems.
+
+*Service Objects*
+
+* Dependency injection via initializer
+* Broadcasting of sync or async events
+
+*Forms Objects*
+
+* Initialization from hash
+* Attribute type coercion
+* ActiveModel compliant
+* Validation
+
+*Validators*
+
+* Validate against external entities
 
 ## Installation
-
-Add this line to your application's Gemfile:
 
 ```ruby
 gem 'domain3'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install domain3
-
 ## Usage
 
-TODO: Write usage instructions here
+Using a little DSL, mostly objects:
+
+```ruby
+def create
+  form = RegisterUser::Form.new(form_params)
+
+  command = RegisterUser.new
+
+  command.subscribe(AuditListener.new)
+
+  command.on(:success) { redirect_to :index }
+  command.on(:failure) { render action: :new }
+
+  command.execute(form)
+end
+```
+
+### Forms
+
+```ruby
+class RegisterUser
+  class Form
+    include Domain3::Form
+
+    attribute :username, String
+    attribute :email,    String
+    attribute :password, String
+
+    validate :username, presense: true
+    validate :email,    presense: true
+    validate :password  presense: true
+  end
+end
+```
+
+The `Form` will have [ActiveModel::Validations]() and [Virtus]() gems included.
+
+### Services
+
+```ruby
+class RegisterUser
+  include Domain3:Service
+
+  event      :user_registered
+  dependency :user_repo, default: 'User',
+             :validator, default: 'Validator'
+
+  def execute(form)
+    if validator.valid?(form)
+      user = User.create!(form.attributes)
+
+      broadcast(:success, user.id)
+      broadcast(:user_registered, user.id)
+    else
+      broadcast(:failed, form)
+    end
+  end
+end
+```
+
+The service has [Wisper]() and [Isopod]() included.
+
+Isopod provides a macro for declaring dependencies and their defaults.
+
+Wisper provides broadcasting of events and subscribing of listeners.
+
+### Validators
+
+```ruby
+class RegisterUser
+  class Validator
+    dependency :user_repo, 'User'
+
+    def validate(form)
+      if user_repo.exists?(username: form.username)
+        form.errors.add(:username, 'is already taken')
+      end
+    end
+  end
+end
+```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/domain3/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+Yes, please.
