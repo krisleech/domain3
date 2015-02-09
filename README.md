@@ -15,7 +15,7 @@ Leans heavily on other gems.
 
 * Initialization from hash
 * Attribute type coercion
-* ActiveModel compliant
+* ActiveModel compliant (Rails only)
 * Validation
 
 *Validators*
@@ -65,6 +65,8 @@ class RegisterUser
 end
 ```
 
+How to do validations without ActiveModel!?
+
 The `Form` will have [ActiveModel::Validations]() and [Virtus]() gems included.
 
 ### Services
@@ -89,9 +91,9 @@ class RegisterUser
 end
 ```
 
-The service has [Wisper]() and [Isopod]() included.
+The service has [Wisper](https://github.com/krisleech/wisper) and [Medicine](https://github.com/krisleech/medicine) included.
 
-Isopod provides a macro for declaring dependencies and their defaults.
+Medicine provides a macro for declaring dependencies and their defaults.
 
 Wisper provides broadcasting of events and subscribing of listeners.
 

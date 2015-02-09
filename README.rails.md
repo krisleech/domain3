@@ -1,5 +1,11 @@
 # Rails DSL
 
+Currently in lib/rails/* will be moved to a gem once finished.
+
+gem 'domain3-rails'
+
+This makes `D3::Form` activemodel compliant.
+
 ```ruby
 class RegistrationController < ApplicationController
   include Domain3::Controller
