@@ -1,5 +1,6 @@
 require_relative '../test_helper'
-require 'domain3/rails/form'
+require 'domain3/form'
+require 'active_model'
 
 class FormTest < Minitest::Test
   def subject_class
