@@ -4,7 +4,7 @@ Lightweight Service, Form and Validator objects.
 
 Decoupled and testable.
 
-Leans heavily on other gems.
+Leans heavily on other libraries.
 
 *Service Objects*
 
@@ -16,11 +16,11 @@ Leans heavily on other gems.
 * Initialization from hash
 * Attribute type coercion
 * ActiveModel compliant (Rails only)
-* Validation
+* Simple Validations
 
 *Validators*
 
-* Validate against external entities
+* Complicated validations, e.g. against entities
 
 ## Installation
 
@@ -33,8 +33,12 @@ gem 'domain3'
 Using a little DSL, mostly objects:
 
 ```ruby
+def new
+  @form = RegisterUser.new_form(form_params)
+end
+
 def create
-  form = RegisterUser::Form.new(form_params)
+  @form = RegisterUser.new_form(form_params)
 
   command = RegisterUser.new
 
@@ -43,7 +47,7 @@ def create
   command.on(:success) { redirect_to :index }
   command.on(:failure) { render action: :new }
 
-  command.execute(form)
+  command.execute(@form)
 end
 ```
 
@@ -54,20 +58,17 @@ class RegisterUser
   class Form
     include D3::Form
 
-    attribute :username, String
-    attribute :email,    String
-    attribute :password, String
-
-    validate :username, presense: true
-    validate :email,    presense: true
-    validate :password  presense: true
+    attribute :username, type: String, presence: true
+    attribute :email,    type: String, presence: true
+    attribute :password, type: String, presence: true
   end
 end
 ```
 
-How to do validations without ActiveModel!?
+The `Form` will have the [Lotus::Validations](https://github.com/lotus/validations) module included.
 
-The `Form` will have [ActiveModel::Validations]() and [Virtus]() gems included.
+Where ActiveModel is present [ActiveModel::Conversion](http://api.rubyonrails.org/classes/ActiveModel/Model.html)
+will be included.
 
 ### Services
 

@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'virtus'
   spec.add_dependency 'wisper'
   spec.add_dependency 'medicine'
+  spec.add_dependency 'lotus-validations'
 end

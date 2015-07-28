@@ -2,13 +2,13 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem "bundler", "~> 1.7"
-gem "rake", "~> 10.0"
-gem 'minitest'
+gem 'bundler'
+gem 'rake'
+gem 'rspec'
+gem 'simplecov'
 gem 'pry-byebug'
-gem 'guard'
-gem 'guard-minitest'
+gem 'guard-shell'
 gem 'yard'
 
-# soft dependency
+# integrations
 gem 'activemodel'
